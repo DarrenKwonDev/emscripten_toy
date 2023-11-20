@@ -1,0 +1,14 @@
+{
+    "name": "wasm_c_demo",
+    "version": "1.0.0",
+    "description": "wasm test",
+    "main": "server.js",
+    "author": "darrenkwnodev46@gmail.com",
+    "license": "MIT",
+    "scripts": {
+        "start": "nodemon --exec 'node ./server.js' -e js,wasm,html"
+    },
+    "dependencies": {
+        "express": "^4.18.2"
+    }
+}

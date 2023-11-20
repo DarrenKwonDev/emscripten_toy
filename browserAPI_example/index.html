@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>WASM Demo</title>
+    </head>
+    <body>
+        <h1>wasm demo</h1>
+        <script>
+            const readMemStr = (offset, len) => {
+                const strBuffer = new Uint8Array(
+                    window.wasm.instance.exports.memory.buffer,
+                    offset,
+                    len
+                );
+                const str = new TextDecoder("utf8").decode(strBuffer);
+
+                window.dispatchEvent(
+                    new CustomEvent("wasmValue", { detail: str })
+                );
+            };
+
+            window.addEventListener("wasmValue", (e) => {
+                console.log(e.detail);
+            });
+
+            const importsFromJS = {
+                env: {
+                    intNum: console.log,
+                    strNum: readMemStr,
+                },
+            };
+
+            WebAssembly.instantiateStreaming(
+                fetch("./program.wasm"),
+                importsFromJS
+            ).then((wasm) => {
+                console.log("WASM ready");
+                // local var to global var
+                window.wasm = wasm;
+
+                console.log(WebAssembly.Module.imports(wasm.module));
+
+                wasm.instance.exports.greet();
+                wasm.instance.exports.getDoublingNum(20);
+            });
+        </script>
+    </body>
+</html>

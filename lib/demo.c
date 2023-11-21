@@ -30,7 +30,12 @@ int main(void) {
 }
 
 int getNum() {
-    return 42;
+    int n = 42;
+
+    // browser의 debugger를 동작시킴.
+    emscripten_debugger();
+
+    return n;
 }
 int getDoubleNum(int n) {
     return n * 2;

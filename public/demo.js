@@ -837,7 +837,7 @@ function createWasm() {
     // This assertion doesn't hold when emscripten is run in --post-link
     // mode.
     // TODO(sbc): Read INITIAL_MEMORY out of the wasm file in post-link mode.
-    //assert(wasmMemory.buffer.byteLength === 16777216);
+    //assert(wasmMemory.buffer.byteLength === 67108864);
     updateMemoryViews();
 
     addOnInit(wasmExports['__wasm_call_ctors']);
@@ -2027,6 +2027,8 @@ function jsFunctionTest(n) { console.log("called by EM_JS"); }
       safeSetTimeout(() => _emscripten_run_script(script), millis);
     };
 
+  function _emscripten_debugger() { debugger }
+
   var _emscripten_memcpy_js = (dest, src, num) => HEAPU8.copyWithin(dest, src, src + num);
 
 
@@ -2253,6 +2255,8 @@ function checkIncomingModuleAPI() {
 var wasmImports = {
   /** @export */
   emscripten_async_run_script: _emscripten_async_run_script,
+  /** @export */
+  emscripten_debugger: _emscripten_debugger,
   /** @export */
   emscripten_memcpy_js: _emscripten_memcpy_js,
   /** @export */

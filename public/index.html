@@ -11,6 +11,12 @@
         <script src="./demo.js"></script>
 
         <script>
+            Module["onRuntimeInitialized"] = () => {
+                console.log("wasm runtime ready");
+            };
+            // all function in wasm module
+            console.log("WASM Module", Module);
+
             // wrap c function as js function
             const greet = cwrap("greet", "string", ["string"]);
 

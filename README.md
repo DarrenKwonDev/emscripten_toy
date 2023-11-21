@@ -14,6 +14,13 @@ https://github.com/emscripten-core/emscripten
 
 LLVM-to-JS compiler.
 
+### traits
+
+-   wasm이 로드되면 Module가 전역 객체로 브라우저 내에 생성됨. 뭐 잘 이해 안가면 출력해서 확인해보자.
+-   export된 함수들은 브라우저 내에서 \_를 접두사로 붙여서 호출해야 함.
+
+### some cmd
+
 ```bash
 # gen wasm, js
 emcc lib/demo.c -s WASM=1 -o public/demo.js
@@ -33,8 +40,21 @@ emcc lib/demo.c -s WASM=1 --post-js public/post.js --pre-js public/pre.js -o pub
 # EXPORTED_FUNCTIONS
 emcc lib/demo.c -s WASM=1 -s EXPORTED_FUNCTIONS="['_getNum', '_main']"  --post-js public/post.js --pre-js public/pre.js -o public/demo.js
 
+# EXPORTED_RUNTIME_METHODS
 emcc lib/demo.c -s WASM=1 -s EXPORTED_FUNCTIONS="['_getNum', '_main', '_getDoubleNum', '_greet']" -s EXPORTED_RUNTIME_METHODS='["cwrap", "ccall"]' --post-js public/post.js --pre-js public/pre.js -o public/demo.js
+
+# TOTAL_MEMORY=64MB
+emcc lib/demo.c -s WASM=1 -s EXPORTED_FUNCTIONS="['_getNum', '_main', '_getDoubleNum', '_greet']" -s EXPORTED_RUNTIME_METHODS='["cwrap", "ccall"]' -s TOTAL_MEMORY=64MB  --post-js public/post.js --pre-js public/pre.js -o public/demo.js
 ```
+
+### mem view
+
+TOTAL_MEMORY로 특정 용량을 설정한 후 wasm을 빌드해서 module을 까보면
+각 메모리를 단위별로 끊어볼 수 있어 비트 연산이 편함.
+
+-   HEAP8, HEAP16, HEAP32
+-   HEAPF32, HEAPF64
+-   HEAPU8, HEAPU16, HEAPU32
 
 ### preamble.js
 
